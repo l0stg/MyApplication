@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 
+// Модель для базы данных
 @Entity(tableName = "my_table")
 data class DataBaseModel(
     @PrimaryKey val id: Int? = null,

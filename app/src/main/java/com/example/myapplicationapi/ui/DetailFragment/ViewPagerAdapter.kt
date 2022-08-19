@@ -1,32 +1,35 @@
-package com.example.myapplicationapi.AdapterRecyclerView
+package com.example.myapplicationapi.ui.DetailFragment
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.data.models.DataBaseModel
 import com.example.myapplicationapi.R
 import com.example.myapplicationapi.databinding.ViewPagerItemBinding
 
 class ViewPagerAdapter(private val onItemClicked: (String)-> Unit): RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
 
-    private var myList: List<String> = listOf()
+    private val myList: MutableList<String> = mutableListOf()
 
+    //Сеттер для новых данных
     fun set(newList: List<String>){
-        this.myList = newList.toList()
+        this.myList.clear()
+        this.myList.addAll(newList)
         notifyDataSetChanged()
     }
-
+    // ВьюХолдер
     class ViewPagerViewHolder(view: View):RecyclerView.ViewHolder(view) {
         private val binding = ViewPagerItemBinding.bind(view)
-        fun bind(data: String){
+        fun bind(item: String, onItemClicked: (String) -> Unit){
             with(binding) {
                 Glide.with(imDetailImage.context)
-                .load(data)
+                .load(item)
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(imDetailImage)
-
+                root.setOnClickListener{
+                    onItemClicked(item)
+                }
             }
         }
     }
@@ -37,14 +40,10 @@ class ViewPagerAdapter(private val onItemClicked: (String)-> Unit): RecyclerView
     }
 
     override fun onBindViewHolder(holder: ViewPagerViewHolder, position: Int) {
-        val item = myList[position]
-        holder.bind(item)
-        holder.itemView.setOnClickListener {
-            onItemClicked(myList[position])
-        }
+        holder.bind(myList[position], onItemClicked)
+
     }
 
     override fun getItemCount(): Int = myList.size
-
 
 }
